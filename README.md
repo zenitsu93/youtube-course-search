@@ -1,37 +1,25 @@
+# Recherche de vidéos de cours sur YouTube
 
+Un script qui lit une liste d'intitulés de cours dans un fichier Excel, interroge l'API YouTube Data pour chacun, et écrit les titres et liens des vidéos trouvées dans un second fichier.
 
----
+L'usage est simple : on a un programme de formation dans un tableur, on veut la ressource vidéo correspondant à chaque chapitre, et on ne veut pas faire cinquante recherches à la main.
 
-# YouTube Video Search Script
+## Utilisation
 
-This Python script uses the YouTube Data API to search for videos related to course titles and classes from an Excel file. It retrieves video titles and URLs and saves the results in another Excel file.
+```bash
+pip install pandas google-api-python-client openpyxl
+```
 
-## Prerequisites
+Obtenez une clé pour l'API YouTube Data depuis la console Google Cloud, renseignez-la dans le script, puis :
 
-- Python 3.x
-- `pandas` library (`pip install pandas`)
-- Google API Client Library (`pip install google-api-python-client`)
+```bash
+python main.py
+```
 
-## Getting Started
+Le fichier d'entrée doit contenir une colonne d'intitulés ; le fichier de sortie reprend chaque intitulé avec les vidéos associées.
 
-1. Obtain an API key for the YouTube Data API from the Google Developer Console.
-2. Install the required Python libraries using pip.
-3. Place your Excel file (`courses.xlsx`) containing course titles and classes in the same directory as the script.
+## À savoir
 
-## Usage
+**Le quota est la contrainte principale.** L'API YouTube Data alloue un budget quotidien, et chaque recherche en consomme une part notable — de l'ordre de cent unités sur un quota par défaut de dix mille. Une centaine de recherches suffit donc à l'épuiser. Sur une liste longue, il faut prévoir de traiter par lots sur plusieurs jours, ou demander une augmentation de quota.
 
-1. Replace the placeholder API key (`api_key = "YOUR_API_KEY"`) with your actual API key.
-2. Update the Excel file name if necessary (`df = pd.read_excel("cent2.xlsx")` and `result_df.to_excel("resultats_videos3.xlsx", index=False)`).
-3. Run the script to search for videos related to each course title and class.
-4. The script will create a new Excel file (`resultats_videos3.xlsx`) with the search results.
-
-## Notes
-
-- You can modify the `max_results` parameter in the `search_videos` function to adjust the number of videos retrieved per search query.
-- Ensure that your API key has the necessary permissions to access the YouTube Data API.
-
-## Disclaimer
-
-This script is provided as-is without any warranties. Use it responsibly and ensure compliance with [YouTube's API](https://developers.google.com/youtube/v3/getting-started?hl=fr) terms of service.
-
----
+**La pertinence n'est pas garantie.** L'API renvoie ce que son moteur juge pertinent pour la chaîne de caractères fournie. Un intitulé de cours ambigu ramènera des résultats hors sujet. Ajouter des mots-clés de contexte au moment de la requête, ou filtrer sur la durée et la chaîne, améliorerait nettement le résultat.
